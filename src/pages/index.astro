@@ -1,0 +1,25 @@
+---
+import Card from '../components/Card.astro';
+import Layout from '../layouts/Layout.astro';
+import { sanityClient } from 'sanity:client';
+
+const posts = await sanityClient.fetch(
+  `*[_type == "post"] | order(publishedAt desc)
+    {
+	 ...,
+     title,
+     slug,
+     excerpt,
+     mainImage,
+     body
+    }`,
+);
+---
+
+<Layout title='Sanity + Astro'>
+  <main>
+    <div class='flex h-screen w-full flex-col items-center justify-center'>
+      {posts.length ? posts.map((post: any) => <Card post={post} />) : null}
+    </div>
+  </main>
+</Layout>

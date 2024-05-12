@@ -1,0 +1,61 @@
+---
+import '@fontsource/russo-one';
+import '@fontsource-variable/oxanium';
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='description' content='Astro description' />
+    <meta name='viewport' content='width=device-width' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='generator' content={Astro.generator} />
+    <title>{title}</title>
+    <ViewTransitions />
+  </head>
+  <body>
+    <slot />
+  </body><style is:global>
+    html {
+      font-family: system-ui, sans-serif;
+      background: #000000;
+      background-size: 224px;
+    }
+    body {
+      font-family: 'Oxanium Variable', system-ui;
+    }
+    code {
+      font-family:
+        Menlo,
+        Monaco,
+        Lucida Console,
+        Liberation Mono,
+        DejaVu Sans Mono,
+        Bitstream Vera Sans Mono,
+        Courier New,
+        monospace;
+    }
+    .heading-text {
+      font-family: 'Russo One', sans-serif;
+      line-height: 0.9em;
+      background: linear-gradient(to bottom, #d7e1fa, #9fa9c3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .primary-text {
+      font-family: 'Oxanium Variable', system-ui;
+      line-height: 1.333em;
+      background: linear-gradient(to bottom, #cad3daa0, #afb6bf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</html>

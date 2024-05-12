@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { sanityClient } from 'sanity:client';
+import type { Slug } from '@sanity/types';
+import { getSanityImageURL } from '../../lib/helpers.js';
+import { fade } from 'astro:transitions';
+
+export async function getStaticPaths() {
+  const post = await sanityClient.fetch(
+    `*[_type == "post"] | order(_createdAt desc) {
+      ...,
+      title,
+      slug,
+      excerpt,
+      mainImage,
+      body
+    }`,
+  );
+
+  return post.map((post: any) => ({
+    params: { slug: post.slug.current },
+    props: { post },
+  }));
+}
+
+const { post = {} as any } = Astro.props;
+---
+
+<Layout title='Sanity + Astro'>
+  <div class='w-full text-white shadow-md'>
+    <div class='flex flex-col p-8 items-center justify-center mb-4'>
+      {
+        post.mainImage ? (
+          <img
+            class='w-full h-full object-cover  '
+            transition:animate={fade({ duration: '.5s' })}
+            src={getSanityImageURL(post.mainImage).url()}
+            alt='Cover image'
+          />
+        ) : (
+          <div class='w-20 h-20 bg-gray-600 rounded-full' />
+        )
+      }
+      <div class='flex flex-col mt-8 w-1/2'>
+        <h3 class='text-3xl font-semibold'>
+          <a
+            class='text-white hover:underline'
+            href={`/posts/${post.slug.current}`}
+          >
+            {post.title}
+          </a>
+        </h3>
+        <p class='text-gray-300 mt-4'>{post.excerpt}</p>
+      </div>
+    </div>
+  </div>
+</Layout>

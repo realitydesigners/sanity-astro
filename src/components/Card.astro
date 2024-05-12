@@ -1,0 +1,50 @@
+---
+import type { PortableTextBlock } from '@portabletext/types';
+import type { ImageAsset, Slug } from '@sanity/types';
+import { getSanityImageURL } from '../lib/helpers.js';
+import { fade } from 'astro:transitions';
+
+interface Props {
+  post: Post;
+}
+
+export interface Post {
+  _type: 'post';
+  _createdAt: string;
+  title?: string;
+  slug: Slug;
+  excerpt?: string;
+  mainImage?: ImageAsset;
+  body: PortableTextBlock[];
+}
+
+const { post } = Astro.props as Props;
+---
+
+<div class='w-full text-white p-4 rounded-lg shadow-md'>
+  <div class='flex items-center flex-row flex-wrap justify-center mb-4'>
+    {
+      post.mainImage ? (
+        <img
+          class='w-[300px] h-full object-cover '
+          transition:animate={fade({ duration: '.5s' })}
+          src={getSanityImageURL(post.mainImage).url()}
+          alt='Cover image'
+        />
+      ) : (
+        <div class='w-20 h-20 bg-black border' />
+      )
+    }
+    <div class='ml-4'>
+      <h3 class='text-lg font-semibold'>
+        <a
+          class='text-white hover:underline'
+          href={`/posts/${post.slug.current}`}
+        >
+          {post.title}
+        </a>
+      </h3>
+      <p class='text-gray-300 mt-1'>{post.excerpt}</p>
+    </div>
+  </div>
+</div>
